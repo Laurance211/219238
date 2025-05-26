@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8" />
+  <title>SDGs 不塑永續-淨灘</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Arial", sans-serif;
+      background-image: url('beach.jpg');
+      background-size: cover;
+      background-position: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.7);
+      font-size: 24px;
+      font-weight: bold;
+      position: absolute;
+      width: 100%;
+      top: 0;
+      left: 0;
+      z-index: 10;
+    }
+    #scoreBoard {
+      font-size: 20px;
+    }
+    .trash {
+      position: absolute;
+      width: 40px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    #message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0,0,0,0.7);
+      color: white;
+      font-size: 36px;
+      padding: 20px 40px;
+      border-radius: 10px;
+      display: none;
+      z-index: 20;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div>SDGs 不塑永續-淨灘</div>
+    <div id="scoreBoard">分數：0</div>
+  </header>
+
+  <div id="message">任務成功!</div>
+
+  <script>
+    const trashImages = [
+      { src: 'images/bottle.png', score: 5 },   // 保特瓶
+      { src: 'images/box.png', score: 3 },   // 紙類
+      { src: 'images/net.png', score: 6 },   // 餐盒
+      { src: 'images/bag.png', score: 4 },   // 塑膠袋
+      { src: 'images/保麗龍.png', score: 7 },   // 保麗龍
+      { src: 'images/cup.png', score: 5 },   // 飲料杯
+    ];
+
+    const trashCount = 50;
+    let score = 0;
+    let collected = 0;
+
+    for (let i = 0; i < trashCount; i++) {
+      const trash = document.createElement('img');
+      const type = trashImages[Math.floor(Math.random() * trashImages.length)];
+      trash.src = type.src;
+      trash.className = 'trash';
+      trash.style.left = Math.random() * (window.innerWidth - 50) + 'px';
+      trash.style.top = Math.random() * (window.innerHeight / 2) + window.innerHeight / 2 - 50 + 'px';
+      trash.style.transform = `rotate(${Math.floor(Math.random() * 360)}deg)`;
+      trash.dataset.score = type.score;
+
+      trash.onclick = function () {
+        if (!trash.classList.contains('collected')) {
+          score += parseInt(trash.dataset.score);
+          collected++;
+          document.getElementById('scoreBoard').textContent = '分數：' + score;
+          trash.classList.add('collected');
+          trash.style.display = 'none';
+
+          if (collected === trashCount) {
+            document.getElementById('message').style.display = 'block';
+          }
+        }
+      };
+
+      document.body.appendChild(trash);
+    }
+  </script>
+</body>
+</html>
